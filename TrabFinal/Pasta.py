@@ -84,7 +84,31 @@ class Pasta(object):
             print("Pasta "+to_ent+" inexistente em "+str(self.nome))
             return self
         
+class File(object):
+    def __new__(cls, nome):
+        if ' ' in nome or '/' in nome:
+            print("Nome invalido")
+            return None
+
+        instance = super().__new__(cls)
+        instance.nome = nome
+        return instance
+    
+    def __init__(self, nome):
+        self.nome = nome
+        self.pai = None
+        self.conteudo = None
         
+    def write(self, text):
+        self.conteudo = text
+        
+    def show(self):
+        if self.conteudo == None:
+            print('Arquivo vazio')
+            return None
+        else:
+            return self.conteudo
+
 class Envirorment(object):
     def __init__(self, user_name):
         
@@ -103,6 +127,11 @@ class Envirorment(object):
         pst2.add(Pasta('p4'))
         
         pst1.add(pst2)
+        
+        file = File('teste.txt')
+        file.write('Arquivo de teste')
+        
+        pst1.add(file)
         
         self.root.add(pst1)
         
@@ -133,7 +162,7 @@ class Envirorment(object):
                 #Se não estiver na root retorna apasta pai
                 else:
                     self.pat = self.pat.pai
-                    
+        
             #Se for o comando de entrar em uma pasta    
             else:
                 #Se começar por / o caminho é definido a partir da root
@@ -149,10 +178,38 @@ class Envirorment(object):
                     #Entra em cada pasta do caminho
                     self.pat = self.pat.cd(pasta)
                 return
+            
+        #cat = Inspecionar conteudo de arquivo ----------------
+        elif cmd[0] == 'cat':
+            #Se o arquivo existir no diretorio atual
+            if cmd[-1] in self.pat.files:
+                cont = self.pat.files[cmd[-1]].show()
+                if cont != None:
+                    print('> '+cont)
+            #Se o arquivo não exixtir    
+            else:
+                print('Arquivo inexistente')
+                
+        #touch - Cria um arquivo -------------------------------      
+        elif cmd[0] == 'touch':
+            #Se o arquivo ja existe
+            if cmd[-1] in self.pat.files:
+                print('Arquivo '+cmd[-1]+' ja existe')
+            else:
+                self.pat.add(File(cmd[-1]))
+                
+        #echo - escreve em um arquivo --------------------------
+        elif cmd[0] == 'echo':
+            cont = ' '.join(cmd[1:-2])
+            dest = cmd[-1]
+            if dest in self.pat.files:
+                self.pat.files[dest].write(cont[1:-1])
+            else:
+                print('Arquivo '+dest+' inexistente')
+
     
     def printLine(self):
-        print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')
-        
+        print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')        
         
 env = Envirorment('user')
 env.printLine()
