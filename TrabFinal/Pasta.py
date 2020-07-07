@@ -209,7 +209,7 @@ class Envirorment(object):
         #echo - escreve em um arquivo --------------------------
         elif cmd[0] == 'echo':
             cont = ' '.join(cmd[1:-2])
-            if cmd[-2] == '>>':
+            if cmd[-2] == '>':
                 dest = cmd[-1]
                 if dest in self.pat.files:
                     if self.pat.files[dest].change:
