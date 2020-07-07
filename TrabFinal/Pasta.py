@@ -1,21 +1,23 @@
 class Pasta(object):
     
-    def __new__(cls, nome):
+    def __new__(cls, nome, change=True):
         if ' ' in nome or '/' in nome:
             print("Nome invalido")
             return None
 
         instance = super().__new__(cls)
         instance.nome = nome
+        instance.change = change
         return instance
     
     #-------------------------------------------------------
-    def __init__(self, nome):
+    def __init__(self, nome, change=True):
         self.nome = nome
         self.pai = None
         self.filhos = {}
         self.files = {}
         self.is_empty = True
+        self.change = change
     
     #---------------------------------------------------------
     def ls(self):
@@ -84,20 +86,24 @@ class Pasta(object):
             print("Pasta "+to_ent+" inexistente em "+str(self.nome))
             return self
         
+#---------------------------------------------------------------------------------------------------        
+
 class File(object):
-    def __new__(cls, nome):
+    def __new__(cls, nome, change=True):
         if ' ' in nome or '/' in nome:
             print("Nome invalido")
             return None
 
         instance = super().__new__(cls)
         instance.nome = nome
+        instance.change = change
         return instance
     
-    def __init__(self, nome):
+    def __init__(self, nome ,change=True):
         self.nome = nome
         self.pai = None
         self.conteudo = None
+        self.change = change
         
     def write(self, text):
         self.conteudo = text
@@ -109,26 +115,28 @@ class File(object):
         else:
             return self.conteudo
 
+#---------------------------------------------------------------------------------------------------
+            
 class Envirorment(object):
     def __init__(self, user_name):
         
         self.user_name = user_name
         
-        self.root = Pasta('root')
+        self.root = Pasta('root', False)
         
-        pst1 = Pasta('home')
-        pst1.add(Pasta('gustavo'))
-        pst1.add(Pasta('SomSom'))
+        pst1 = Pasta('home', False)
+        pst1.add(Pasta('gustavo', False))
+        pst1.add(Pasta('SomSom', False))
         
-        pst2 = Pasta('Nathan')
-        pst2.add(Pasta('p1'))
-        pst2.add(Pasta('p2'))
-        pst2.add(Pasta('p3'))
-        pst2.add(Pasta('p4'))
+        pst2 = Pasta('Nathan', False)
+        pst2.add(Pasta('p1', False))
+        pst2.add(Pasta('p2', False))
+        pst2.add(Pasta('p3', False))
+        pst2.add(Pasta('p4', False))
         
         pst1.add(pst2)
         
-        file = File('teste.txt')
+        file = File('teste.txt', False)
         file.write('Arquivo de teste')
         
         pst1.add(file)
@@ -194,22 +202,50 @@ class Envirorment(object):
         elif cmd[0] == 'touch':
             #Se o arquivo ja existe
             if cmd[-1] in self.pat.files:
-                print('Arquivo '+cmd[-1]+' ja existe')
+                pass
             else:
                 self.pat.add(File(cmd[-1]))
                 
         #echo - escreve em um arquivo --------------------------
         elif cmd[0] == 'echo':
             cont = ' '.join(cmd[1:-2])
-            dest = cmd[-1]
-            if dest in self.pat.files:
-                self.pat.files[dest].write(cont[1:-1])
+            if cmd[-2] == '>>':
+                dest = cmd[-1]
+                if dest in self.pat.files:
+                    if self.pat.files[dest].change:
+                        self.pat.files[dest].write(cont[1:-1])
+                    else:
+                        print("Acho melhor não mudar esse arquivo por enqunto")
+                else:
+                    print('Arquivo '+dest+' inexistente')
+        
+        #mkdir - cria um diretorio no diretorio atual -----------
+        elif cmd[0] == 'mkdir':
+            #Se a pasta ja existe
+            if cmd[-1] in self.pat.filhos:
+                print('Pasta '+cmd[-1]+' ja existe')
             else:
-                print('Arquivo '+dest+' inexistente')
-
-    
+                self.pat.add(Pasta(cmd[-1]))
+                
+        #rm - remove um diretorio
+        elif cmd[0] == 'rm':
+            #Se a pasta existe
+            if cmd[-1] in self.pat.filhos:
+                if self.pat.filhos[cmd[-1]].change:
+                    self.pat.rm(cmd[-1])
+                else:
+                    print("Acho melhor não excluir essa pasta por enquanto")
+            elif cmd[-1] in self.pat.files:
+                if self.pat.files[cmd[-1]].change:
+                    self.pat.rm(cmd[-1])
+                else:
+                    print("Acho melhor não excluir esse arquivo por enquanto")
+                    
+                    
     def printLine(self):
-        print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')        
+        print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')       
+
+#---------------------------------------------------------------------------------------------------
         
 env = Envirorment('user')
 env.printLine()
