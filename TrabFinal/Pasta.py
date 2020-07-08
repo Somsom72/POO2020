@@ -313,7 +313,7 @@ class Envirorment(object):
                     print('Nome invalido! Favor inserir um novo nome')
                     name = str(input())
                 self.user_name = name
-                print('Linus: Interessante.'+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
+                print('Linus: Interessante. '+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
                 self.senha = str(input())
                 self.segue()
                 if self.exit: return
