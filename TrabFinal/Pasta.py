@@ -281,20 +281,17 @@ class Envirorment(object):
             
     #--------------------------------------------------------- ---------------   
     def checkFase(self):
-        #Se estiver na fase 0
+        #Se estiver na fase 1
         if(self.fase == 1):
             #Se ainda não tiver imprimido as falas
             if not self.printed:
                 self.printed = True
                 print("Capítulo 1 - A Tragédia e o Pinguim")
-                self.segue()
-                if self.exit: return
+                time.sleep(2)
                 print('Linus: Não, de novo não…')
-                self.segue()
-                if self.exit: return
+                time.sleep(2)
                 print('Linus: O Delamaro Mestre Hacker do Mal precisa parar com essas travessuras.')
-                self.segue()
-                if self.exit: return
+                time.sleep(2)
                 print('Linus: Lá vamos nós então, consegue me ouvir err.. ler? (Não consigo te ouvir, responda \nteclando "segue" caso esteja me ouvindo)')
                 self.segue()
                 if self.exit: return
@@ -313,7 +310,7 @@ class Envirorment(object):
                     print('Nome invalido! Favor inserir um novo nome')
                     name = str(input())
                 self.user_name = name
-                print('Linus: Interessante.'+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
+                print('Linus: Interessante. '+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
                 self.senha = str(input())
                 self.segue()
                 if self.exit: return
@@ -324,7 +321,8 @@ class Envirorment(object):
                 if self.exit: return
                 self.printed = False
                 self.fase = 2
-            
+        
+        #Se estiver na fase 2
         if(self.fase == 2):
             self.segue()
             if self.exit: return
