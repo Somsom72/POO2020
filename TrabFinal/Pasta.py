@@ -1,3 +1,5 @@
+import time
+
 class Pasta(object):
     
     def __new__(cls, nome, change=True):
@@ -85,7 +87,6 @@ class Pasta(object):
         else:
             print("Pasta "+to_ent+" inexistente em "+str(self.nome))
             return self
-        
 #---------------------------------------------------------------------------------------------------        
 
 class File(object):
@@ -114,7 +115,7 @@ class File(object):
             return None
         else:
             return self.conteudo
-
+        
 #---------------------------------------------------------------------------------------------------
             
 class Envirorment(object):
@@ -122,7 +123,21 @@ class Envirorment(object):
         
         self.user_name = user_name
         
-        self.root = Pasta('root', False)
+        self.root = self.createEnv()
+        
+        self.pat = self.root
+        
+        self.fase = 1
+        
+        self.printed = False
+        
+        self.exit = False
+        
+        self.senha = None
+        
+    #--------------------------------------------------------- ---------------   
+    def createEnv(self):
+        root = Pasta('root', False)
         
         pst1 = Pasta('home', False)
         pst1.add(Pasta('gustavo', False))
@@ -141,11 +156,11 @@ class Envirorment(object):
         
         pst1.add(file)
         
-        self.root.add(pst1)
+        root.add(pst1)
         
-        self.pat = self.root
-        
-    #---------------------------------------------------------    
+        return root
+    
+    #--------------------------------------------------------- ---------------   
     def cmdReader(self, cmd):
         '''
         Função que le e interpreta um comando passado ao terminal
@@ -154,6 +169,9 @@ class Envirorment(object):
             root: (Pasta) Pasta root do sistema
             pat: (Pasta) Pasta atual
         '''
+        if cmd == 'segue':
+            return
+        
         cmd = cmd.split(" ")
         
         #ls = List ------------------------------------------
@@ -227,7 +245,7 @@ class Envirorment(object):
             else:
                 self.pat.add(Pasta(cmd[-1]))
                 
-        #rm - remove um diretorio
+        #rm - remove um diretorio -------------------------------
         elif cmd[0] == 'rm':
             #Se a pasta existe
             if cmd[-1] in self.pat.filhos:
@@ -240,17 +258,78 @@ class Envirorment(object):
                     self.pat.rm(cmd[-1])
                 else:
                     print("Acho melhor não excluir esse arquivo por enquanto")
+        
+        #exit - finaliza o programa ------------------------------
+        elif cmd[0] == 'exit':
+            self.exit = True
                     
-                    
+    #--------------------------------------------------------- ---------------               
     def printLine(self):
-        print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')       
+        print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')
+        
+    #--------------------------------------------------------- ---------------       
+    def segue(self):
+        self.printLine()
+        cmd = str(input())
+        self.cmdReader(cmd)
+        if self.exit: return
+        while cmd != 'segue':
+            self.printLine()
+            cmd = str(input())
+            self.cmdReader(cmd)
+            if self.exit: return
+            
+    #--------------------------------------------------------- ---------------   
+    def checkFase(self):
+        #Se estiver na fase 0
+        if(self.fase == 1):
+            #Se ainda não tiver imprimido as falas
+            if not self.printed:
+                self.printed = True
+                print("Capítulo 1 - A Tragédia e o Pinguim")
+                self.segue()
+                if self.exit: return
+                print('Linus: Não, de novo não…')
+                self.segue()
+                if self.exit: return
+                print('Linus: O Delamaro Mestre Hacker do Mal precisa parar com essas travessuras.')
+                self.segue()
+                if self.exit: return
+                print('Linus: Lá vamos nós então, consegue me ouvir err.. ler? (Não consigo te ouvir, responda \nteclando "segue" caso esteja me ouvindo)')
+                self.segue()
+                if self.exit: return
+                print('Linus: Perfeito, esse teclado vai ser nossa única forma de comunicação por enquanto, tente \nnão perdê-lo.')
+                self.segue()
+                if self.exit: return
+                print('Linus: Deve ter várias perguntas. Por que o céu é azul? Por que a minha tela está preta? \nComo amarro uma gravata? ')
+                self.segue()
+                if self.exit: return
+                print('Linus: Da forma mais indolor então, respectivamente, a luz azul se espalha facilmente por \nter uma maior frequência de onda; a tela está assim por conta do Malvado Mestre \nDelamaro, que sugou sua interface gráfica, deixando apenas este “Terminal”; por fim, não \nsei dar nós em gravatas ou em qualquer outra coisa, pois sou um pinguim virtual. Me chame \nde Linus.')
+                self.segue()
+                if self.exit: return
+                print('Linus: A propósito, como você chama? (Responda e pressione ENTER.)')
+                name = str(input())
+                while '/' in name or ' ' in name or name == '':
+                    print('Nome invalido! Favor inserir um novo nome')
+                    name = str(input())
+                self.user_name = name
+                print('Linus: Interessante.'+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
+                self.senha = str(input())
+                self.segue()
+                if self.exit: return
+                print('Linus: Ótimo, alguma pergunta antes de embarcarmos?')
+                time.sleep(3)
+                print('Linus: Brincadeira, não fui programado para responder perguntas, vamos começar antes \nque o Delamaro tenha outra ideia brilhante...')
+                self.segue()
+                if self.exit: return
+                self.printed = False
+                self.fase = 2
+            
+        if(self.fase == 2):
+            self.segue()
+            if self.exit: return
 
 #---------------------------------------------------------------------------------------------------
         
 env = Envirorment('user')
-env.printLine()
-cmd = str(input())
-while cmd != 'exit':
-    env.cmdReader(cmd)
-    env.printLine()
-    cmd = str(input())
+env.checkFase()
