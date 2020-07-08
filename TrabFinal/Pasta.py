@@ -139,29 +139,20 @@ class Envirorment(object):
     def createEnv(self):
         root = Pasta('root', False)
         
-        pst1 = Pasta('home', False)
-        pst1.add(Pasta('gustavo', False))
-        pst1.add(Pasta('SomSom', False))
+        floresta = Pasta('floresta', False)
         
-        pst2 = Pasta('Nathan', False)
-        pst2.add(Pasta('p1', False))
-        pst2.add(Pasta('p2', False))
-        pst2.add(Pasta('p3', False))
-        pst2.add(Pasta('p4', False))
         
-        pst1.add(pst2)
+        mar = Pasta('mar', False)
         
-        file = File('teste.txt', False)
-        file.write('Arquivo de teste')
+
         
-        pst1.add(file)
-        
-        root.add(pst1)
+        root.add(floresta)
+        root.add(mar)
         
         return root
     
     #--------------------------------------------------------- ---------------   
-    def cmdReader(self, cmd):
+    def cmdReader(self, cmd, rep):
         '''
         Função que le e interpreta um comando passado ao terminal
         input:
@@ -170,6 +161,9 @@ class Envirorment(object):
             pat: (Pasta) Pasta atual
         '''
         if cmd == 'segue':
+            return
+        elif cmd == 'repete':
+            print(rep)
             return
         
         cmd = cmd.split(" ")
@@ -268,15 +262,15 @@ class Envirorment(object):
         print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')
         
     #--------------------------------------------------------- ---------------       
-    def segue(self):
+    def segue(self , rep):
         self.printLine()
         cmd = str(input())
-        self.cmdReader(cmd)
+        self.cmdReader(cmd, rep)
         if self.exit: return
         while cmd != 'segue':
             self.printLine()
             cmd = str(input())
-            self.cmdReader(cmd)
+            self.cmdReader(cmd, rep)
             if self.exit: return
             
     #--------------------------------------------------------- ---------------   
@@ -292,17 +286,21 @@ class Envirorment(object):
                 time.sleep(2)
                 print('Linus: O Delamaro Mestre Hacker do Mal precisa parar com essas travessuras.')
                 time.sleep(2)
-                print('Linus: Lá vamos nós então, consegue me ouvir err.. ler? (Não consigo te ouvir, responda \nteclando "segue" caso esteja me ouvindo)')
-                self.segue()
+                txt = 'Linus: Lá vamos nós então, consegue me ouvir err.. ler? (Não consigo te ouvir, responda teclando “segue", depois pressionando ENTER. Se não me entendeu, tecle "repete" e ENTER.)'
+                print(txt)
+                self.segue(txt)
                 if self.exit: return
-                print('Linus: Perfeito, esse teclado vai ser nossa única forma de comunicação por enquanto, tente \nnão perdê-lo.')
-                self.segue()
+                txt = 'Linus: Perfeito, esse teclado vai ser nossa única forma de comunicação por enquanto, tente \nnão perdê-lo.'
+                print(txt)
+                self.segue(txt)
                 if self.exit: return
-                print('Linus: Deve ter várias perguntas. Por que o céu é azul? Por que a minha tela está preta? \nComo amarro uma gravata? ')
-                self.segue()
+                txt = 'Linus: Deve ter várias perguntas. Por que o céu é azul? Por que a minha tela está preta? \nComo amarro uma gravata? '
+                print(txt)
+                self.segue(txt)
                 if self.exit: return
-                print('Linus: Da forma mais indolor então, respectivamente, a luz azul se espalha facilmente por \nter uma maior frequência de onda; a tela está assim por conta do Malvado Mestre \nDelamaro, que sugou sua interface gráfica, deixando apenas este “Terminal”; por fim, não \nsei dar nós em gravatas ou em qualquer outra coisa, pois sou um pinguim virtual. Me chame \nde Linus.')
-                self.segue()
+                txt = 'Linus: Da forma mais indolor então, respectivamente, a luz azul se espalha facilmente por \nter uma maior frequência de onda; a tela está assim por conta do Malvado Mestre \nDelamaro, que sugou sua interface gráfica, deixando apenas este “Terminal”; por fim, não \nsei dar nós em gravatas ou em qualquer outra coisa, pois sou um pinguim virtual. Me chame \nde Linus.'
+                print(txt)
+                self.segue(txt)
                 if self.exit: return
                 print('Linus: A propósito, como você chama? (Responda e pressione ENTER.)')
                 name = str(input())
@@ -312,20 +310,35 @@ class Envirorment(object):
                 self.user_name = name
                 print('Linus: Interessante. '+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
                 self.senha = str(input())
-                self.segue()
+                txt = '...'
+                self.segue(txt)
                 if self.exit: return
                 print('Linus: Ótimo, alguma pergunta antes de embarcarmos?')
-                time.sleep(3)
-                print('Linus: Brincadeira, não fui programado para responder perguntas, vamos começar antes \nque o Delamaro tenha outra ideia brilhante...')
-                self.segue()
+                time.sleep(2)
+                txt = 'Linus: Brincadeira, não fui programado para responder perguntas, vamos começar antes \nque o Delamaro tenha outra ideia brilhante...'
+                print(txt)
+                self.segue(txt)
                 if self.exit: return
                 self.printed = False
                 self.fase = 2
         
         #Se estiver na fase 2
         if(self.fase == 2):
-            self.segue()
-            if self.exit: return
+            #Se ainda não tiver imprimido todos os textos
+            if not self.printed:
+                self.printed = True
+                print("Capítulo 2 - A Volta ao Mundo")
+                time.sleep(2)
+                txt = 'Linus: Bom, já consegue falar, mas ainda não tomou seus primeiros passos.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                txt = 'Linus: Literalmente. Se quiser recuperar a interface gráfica, vai ter que aprender a andar por \naqui.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                print('Linus: Diga “ls” ao terminal se quiser enxergar o mundo ao seu redor.')
+                
 
 #---------------------------------------------------------------------------------------------------
         
