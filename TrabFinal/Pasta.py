@@ -116,6 +116,9 @@ class File(object):
         else:
             return self.conteudo
         
+    def setChange(self, change):
+        self.change = change
+        
 #---------------------------------------------------------------------------------------------------
             
 class Envirorment(object):
@@ -127,7 +130,7 @@ class Envirorment(object):
         
         self.pat = self.root
         
-        self.fase = 3
+        self.fase = 1
         
         self.printed = False
         
@@ -410,7 +413,56 @@ class Envirorment(object):
                 txt = 'Linus: Para comprar um da apt-get, digite “apt-get martelo”'
                 print(txt)
                 self.segue_cond('apt-get martelo', txt, 'rio')
+                print("Fabricando cabo...")
+                time.sleep(1)
+                print("Forjando a cabeça...")
+                time.sleep(1)
+                print("Acoplando partes...")
+                time.sleep(1)
+                print("Martelo adquirido !")
+                txt = 'Linus: Martelo em mãos, vamos agora tentar mudar a ponte “instável” para uma ponte \n“firme”.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                print("Linus: Basta pegar seu martelo e…")
+                time.sleep(1)
+                self.root.filhos['floresta'].filhos['rio'].files['ponte.txt'].setChange(True)
+                self.root.filhos['floresta'].filhos['rio'].rm('ponte.txt')
+                txt = 'Linus: Você está vendo isso ? ... digite ls para ver !'
+                print(txt)
+                self.segue_cond('ls', txt, 'rio')
+                if self.exit: return
+                print("Linus: A ponte estava tão instável que deve ter desabado.")
+                time.sleep(1)
+                print("Linus: Não queria te dar tanto poder tão cedo, mas não vejo outra forma…")
+                time.sleep(1)
+                print("Linus: A realidade é que nem precisávamos ir ao mercado apt-get comprar o martelo para \nconsertar a ponte, pois o terminal faz coisas mágicas para quem pede educadamente.")
+                time.sleep(1)
+                print("Linus: Vamos brincar de Deus por um instante.")
+                txt = 'Linus: Do éter, faça surgir uma ponte, dizendo: “touch ponte.txt”.'
+                print(txt)
+                self.segue_cond('touch ponte.txt', txt, 'rio')
+                if self.exit: return
+                txt = 'Linus: Confirme que ela de fato está lá ... Use “cat” para inspecioná-la.'
+                print(txt)
+                self.segue_cond('cat ponte.txt', txt, 'rio')
+                if self.exit: return
+                print("Linus: Vazia! Nem instável nem firme. Vamos resolver isso de vez.")
+                time.sleep(1)
+                print("Linus: Se “touch” fornece poderes de criação, “echo” fornece o poder da transformação.")
+                txt = 'Linus: Use “echo “firme” > ponte.txt” para caracterizar a ponte que você criou como firme.'
+                print(txt)
+                self.segue_cond('echo "firme" > ponte.txt', txt, 'rio')
+                if self.exit: return
+                txt = 'Linus: Perfeito, sempre bom confirmar que de fato funcionou. Use o cat no arquivo para verificar.'
+                print(txt)
+                self.segue_cond('cat ponte.txt', txt, 'rio')
+                if self.exit: return
+                print("Linus: Olha só! Quem precisa de martelos quando temos o terminal?! Agora vamos tentar não morrer do outro lado dessa ponte. Siga-me.")
                 
+                self.printed = False
+                self.fase = 4
+        
 #---------------------------------------------------------------------------------------------------
         
 env = Envirorment('user')
