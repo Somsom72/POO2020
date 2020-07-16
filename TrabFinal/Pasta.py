@@ -141,6 +141,16 @@ class Envirorment(object):
         
         floresta = Pasta('floresta', False)
         
+        rio = Pasta('rio', False)
+        
+        agua = File('agua.txt', False)
+        peixe = File('peixe.txt', False)
+        ponte = File('ponte.txt', False)
+        rio.add(agua)
+        rio.add(peixe)
+        rio.add(ponte)
+        
+        floresta.add(rio)
         
         mar = Pasta('mar', False)
         
@@ -256,15 +266,17 @@ class Envirorment(object):
         #exit - finaliza o programa ------------------------------
         elif cmd[0] == 'exit':
             self.exit = True
-                    
+        
+        return          
     #--------------------------------------------------------- ---------------               
     def printLine(self):
         print("\033[1;32;48m"+self.user_name+'@'+self.user_name+':'+"\033[1;34;48m"+self.pat.nome+"\033[0;0;0m"+'$', end=' ')
         
     #--------------------------------------------------------- ---------------       
-    def segue(self , rep):
-        self.printLine()
-        cmd = str(input())
+    def segue(self , rep, cmd = None):
+        if cmd==None:
+            self.printLine()
+            cmd = str(input())
         self.cmdReader(cmd, rep)
         if self.exit: return
         while cmd != 'segue':
@@ -272,7 +284,20 @@ class Envirorment(object):
             cmd = str(input())
             self.cmdReader(cmd, rep)
             if self.exit: return
-            
+    
+    #--------------------------------------------------------- ---------------
+    def segue_cond(self, cmd_obj, txt, pat_nome):
+        self.printLine()
+        cmd = str(input())
+        while(cmd != cmd_obj or self.pat.nome != pat_nome):
+            if(cmd == cmd_obj and self.pat.nome != pat_nome):
+                print("Va para a pasta "+pat_nome+" antes de usar esse comando")
+            self.cmdReader(cmd, txt)
+            if self.exit: return
+            self.printLine()
+            cmd = str(input())
+        self.cmdReader(cmd, txt)
+        return
     #--------------------------------------------------------- ---------------   
     def checkFase(self):
         #Se estiver na fase 1
@@ -317,8 +342,7 @@ class Envirorment(object):
                 time.sleep(2)
                 txt = 'Linus: Brincadeira, não fui programado para responder perguntas, vamos começar antes \nque o Delamaro tenha outra ideia brilhante...'
                 print(txt)
-                self.segue(txt)
-                if self.exit: return
+
                 self.printed = False
                 self.fase = 2
         
@@ -327,7 +351,7 @@ class Envirorment(object):
             #Se ainda não tiver imprimido todos os textos
             if not self.printed:
                 self.printed = True
-                print("Capítulo 2 - A Volta ao Mundo")
+                print("\nCapítulo 2 - A Volta ao Mundo")
                 time.sleep(2)
                 txt = 'Linus: Bom, já consegue falar, mas ainda não tomou seus primeiros passos.'
                 print(txt)
@@ -337,9 +361,29 @@ class Envirorment(object):
                 print(txt)
                 self.segue(txt)
                 if self.exit: return
-                print('Linus: Diga “ls” ao terminal se quiser enxergar o mundo ao seu redor.')
-                
+                txt = 'Linus: Diga “ls” ao terminal se quiser enxergar o mundo ao seu redor.'
+                print(txt)
+                self.segue_cond('ls', txt, 'root')
+                if self.exit: return
+                txt = 'Linus: Isso! Veja só que belas paisagens! Não consegue ver? Bom você pode pelo menos \n imaginar, aqui as coisas são simples para que funcionem mais rápido, não tem aquela \n demora toda de abrir uma coisa naquela tela cheia de pastas e ícones, eheheh. Enfim, para \n se movimentar, diga “cd x” ao terminal, onde x representa o lugar para onde deseja \n ir. Experimente entrar na floresta.'
+                print(txt)
+                self.segue_cond('cd floresta', txt, 'root')
+                if self.exit: return
+                txt = 'Linus: Agora que estamos na floresta, olhe ao seu redor com “ls” e vá para o único lugar \navistado usando “cd”.'
+                print(txt)
+                self.segue_cond('cd rio', txt, 'floresta')
+                if self.exit: return
 
+                self.printed = False
+                self.fase = 3
+        
+        if(self.fase == 3):
+            #Se ainda não tiver imprimido todos os textos
+            if not self.printed:
+                self.printed = True
+                print("\nCapítulo 3 - A Ponte da Miragem")
+                time.sleep(2)
+                print("666")
 #---------------------------------------------------------------------------------------------------
         
 env = Envirorment('user')
