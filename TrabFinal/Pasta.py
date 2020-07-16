@@ -127,7 +127,7 @@ class Envirorment(object):
         
         self.pat = self.root
         
-        self.fase = 1
+        self.fase = 3
         
         self.printed = False
         
@@ -144,8 +144,11 @@ class Envirorment(object):
         rio = Pasta('rio', False)
         
         agua = File('agua.txt', False)
+        agua.write('Muito oxigênio, e o dobro de hidrogênio!')
         peixe = File('peixe.txt', False)
+        peixe.write('Vertebrado aquático de médio porte.')
         ponte = File('ponte.txt', False)
+        ponte.write('instável...')
         rio.add(agua)
         rio.add(peixe)
         rio.add(ponte)
@@ -383,7 +386,31 @@ class Envirorment(object):
                 self.printed = True
                 print("\nCapítulo 3 - A Ponte da Miragem")
                 time.sleep(2)
-                print("666")
+                print("Linus: Vamos precisar atravessar este rio. Olhe ao seu redor. Ideias?")
+                txt = 'Linus: Por ser difícil montar em um peixe, a ponte parece ser útil, mas nem a ponte nem a \nágua nem o peixe são lugares. Todos são itens. No mundo do terminal, lugares chamam \n“diretórios” e itens chamam “arquivos”.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                txt = 'Linus: Sabemos ir para diretórios usando “cd” mas para inspecionar um arquivo, o comando \né “cat x” (onde x = nome de um arquivo). Tente inspecionar o conteúdo da ponte.'
+                print(txt)
+                self.segue_cond('cat ponte.txt', txt, 'rio')
+                if self.exit: return
+                txt = 'Linus: Instável?! O Delamaro deve ter corrompido nossa única passagem! Não se \ndesespere, o terminal consegue nos ajudar.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                txt = 'Linus: Digamos que o terminal tem uma lojinha chamada “apt-get”. Esse mercado é muito \npopular entre os moradores do terminal por vender tudo que a imaginação possa desejar.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                txt = 'Linus: Nós queremos apenas um martelo para consertar a ponte.'
+                print(txt)
+                self.segue(txt)
+                if self.exit: return
+                txt = 'Linus: Para comprar um da apt-get, digite “apt-get martelo”'
+                print(txt)
+                self.segue_cond('apt-get martelo', txt, 'rio')
+                
 #---------------------------------------------------------------------------------------------------
         
 env = Envirorment('user')
