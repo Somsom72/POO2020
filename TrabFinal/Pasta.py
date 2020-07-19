@@ -173,7 +173,7 @@ class Envirorment(object):
         caverna = Pasta('caverna', False)
         
         manual = File('ManualQuartus.txt', False)
-        manual.write('Saudações '+self.user_name+', sou o Manual do Quartus, um livro falante que por alguma razão \nsabe seu nome!\nPara sobreviver a Caverna da Criptografia, terá de decifrar meu enigma, e criar um arquivo \n“enigma.txt” contendo sua resposta.\nSe "a" é "c" e "c" é "e", "ekhtc fg eguct" é oque?')
+        manual.write('Saudações '+self.user_name+', sou o Manual do Quartus, um livro falante que por alguma razão \nsabe seu nome!\nPara sobreviver a Caverna da Criptografia, terá de decifrar meu enigma, e criar um arquivo \n“enigma.txt” contendo sua resposta.\nSe "a" é "c" e "c" é "e", "ekhtc fg eguct" é o que?')
         
         caverna.add(manual)
         
@@ -259,7 +259,7 @@ class Envirorment(object):
                     if self.pat.files[dest].change:
                         self.pat.files[dest].write(cont[1:-1])
                     else:
-                        print("Você não pode mudar esse arquivo por enqunto")
+                        print("Você não pode mudar esse arquivo por enquanto")
                 else:
                     print('Arquivo '+dest+' inexistente')
         
