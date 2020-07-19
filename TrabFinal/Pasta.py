@@ -170,6 +170,8 @@ class Envirorment(object):
         return root
     #--------------------------------------------------------- --------------- 
     def changeEnv(self):
+        entrada = Pasta('entrada', False)
+
         caverna = Pasta('caverna', False)
         
         manual = File('ManualQuartus.txt', False)
@@ -177,7 +179,9 @@ class Envirorment(object):
         
         caverna.add(manual)
         
-        return caverna
+        entrada.add(caverna)
+
+        return entrada
     
     #--------------------------------------------------------- ---------------   
     def cmdReader(self, cmd, rep):
@@ -384,7 +388,7 @@ class Envirorment(object):
             print(txt)
             self.segue_cond('cd floresta', txt, 'root')
             if self.exit: return
-            txt = 'Linus: Agora que estamos na floresta, olhe ao seu redor com “ls” e vá para o único lugar \navistado usando “cd”.'
+            txt = 'Linus: Agora que estamos na floresta, olhe ao seu redor com “ls” e vá para o único lugar \navistado usando “cd”. (Use "cd .." se quiser andar para trás.)'
             print(txt)
             self.segue_cond('cd rio', txt, 'floresta')
             if self.exit: return
@@ -395,6 +399,8 @@ class Envirorment(object):
             print("\nCapítulo 3 - A Ponte da Miragem")
             time.sleep(2)
             print("Linus: Vamos precisar atravessar este rio. Olhe ao seu redor. Ideias?")
+            self.segue_cond('ls', "Linus: Vamos precisar atravessar este rio. Olhe ao seu redor. Ideias?", 'rio')
+            if self.exit: return
             txt = 'Linus: Por ser difícil montar em um peixe, a ponte parece ser útil, mas nem a ponte nem a \nágua nem o peixe são lugares. Todos são itens. No mundo do terminal, lugares chamam \n“diretórios” e itens chamam “arquivos”.'
             print(txt)
             self.segue(txt)
@@ -550,6 +556,8 @@ class Envirorment(object):
             self.segue_cond('./ordenador < letras.txt', txt, 'saida')
             self.root.filhos['saida'].files['letras.txt'].write('a b c d e f g h i j k l m n o p q r s t u v w x y z')
             if self.exit: return
+            time.sleep(1)
+            print('--- execução completa ---')
             txt = 'Knuth: Olha só a rapidez!! Será que finalmente criei um sort O(n)?? Essa vai para o livro!'
             print(txt)
             self.segue(txt)
