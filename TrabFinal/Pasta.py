@@ -2,7 +2,7 @@ import time
 
 class Pasta(object):
     
-    def __new__(cls, nome, change=True):
+    def __new__(cls, nome, change=True, perm=True):
         if ' ' in nome or '/' in nome:
             print("Nome invalido")
             return None
@@ -10,16 +10,18 @@ class Pasta(object):
         instance = super().__new__(cls)
         instance.nome = nome
         instance.change = change
+        instance.perm = perm
         return instance
     
     #-------------------------------------------------------
-    def __init__(self, nome, change=True):
+    def __init__(self, nome, change=True, perm = True):
         self.nome = nome
         self.pai = None
         self.filhos = {}
         self.files = {}
         self.is_empty = True
         self.change = change
+        self.perm = perm
     
     #---------------------------------------------------------
     def ls(self):
@@ -87,6 +89,10 @@ class Pasta(object):
         else:
             print("Pasta "+to_ent+" inexistente em "+str(self.nome))
             return self
+    #---------------------------------------------------------    
+    def changePerm(self, new):
+        self.perm = new
+        return
 #---------------------------------------------------------------------------------------------------        
 
 class File(object):
@@ -132,8 +138,6 @@ class Envirorment(object):
         
         self.fase = 1
         
-        self.printed = False
-        
         self.exit = False
         
         self.senha = None
@@ -160,12 +164,20 @@ class Envirorment(object):
         
         mar = Pasta('mar', False)
         
-
-        
         root.add(floresta)
         root.add(mar)
         
         return root
+    #--------------------------------------------------------- --------------- 
+    def changeEnv(self):
+        caverna = Pasta('caverna', False)
+        
+        manual = File('ManualQuartus.txt', False)
+        manual.write('Saudações '+self.user_name+', sou o Manual do Quartus, um livro falante que por alguma razão \nsabe seu nome!\nPara sobreviver a Caverna da Criptografia, terá de decifrar meu enigma, e criar um arquivo \n“enigma.txt” contendo sua resposta.\nSe "a" é "c" e "c" é "e", "ekhtc fg eguct" é oque?')
+        
+        caverna.add(manual)
+        
+        return caverna
     
     #--------------------------------------------------------- ---------------   
     def cmdReader(self, cmd, rep):
@@ -213,6 +225,10 @@ class Envirorment(object):
                 for pasta in path:
                     #Entra em cada pasta do caminho
                     self.pat = self.pat.cd(pasta)
+                    if(self.pat.perm == False):
+                        self.pat = self.pat.pai
+                        print("Acesso negado")
+                        break
                 return
             
         #cat = Inspecionar conteudo de arquivo ----------------
@@ -243,7 +259,7 @@ class Envirorment(object):
                     if self.pat.files[dest].change:
                         self.pat.files[dest].write(cont[1:-1])
                     else:
-                        print("Acho melhor não mudar esse arquivo por enqunto")
+                        print("Você não pode mudar esse arquivo por enqunto")
                 else:
                     print('Arquivo '+dest+' inexistente')
         
@@ -262,12 +278,12 @@ class Envirorment(object):
                 if self.pat.filhos[cmd[-1]].change:
                     self.pat.rm(cmd[-1])
                 else:
-                    print("Acho melhor não excluir essa pasta por enquanto")
+                    print("Você não pode excluir essa pasta por enquanto")
             elif cmd[-1] in self.pat.files:
                 if self.pat.files[cmd[-1]].change:
                     self.pat.rm(cmd[-1])
                 else:
-                    print("Acho melhor não excluir esse arquivo por enquanto")
+                    print("Você não pode excluir esse arquivo por enquanto")
         
         #exit - finaliza o programa ------------------------------
         elif cmd[0] == 'exit':
@@ -308,162 +324,432 @@ class Envirorment(object):
     def checkFase(self):
         #Se estiver na fase 1
         if(self.fase == 1):
-            #Se ainda não tiver imprimido as falas
-            if not self.printed:
-                self.printed = True
-                print("Capítulo 1 - A Tragédia e o Pinguim")
-                time.sleep(2)
-                print('Linus: Não, de novo não…')
-                time.sleep(2)
-                print('Linus: O Delamaro Mestre Hacker do Mal precisa parar com essas travessuras.')
-                time.sleep(2)
-                txt = 'Linus: Lá vamos nós então, consegue me ouvir err.. ler? (Não consigo te ouvir, responda teclando “segue", depois pressionando ENTER. Se não me entendeu, tecle "repete" e ENTER.)'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Perfeito, esse teclado vai ser nossa única forma de comunicação por enquanto, tente \nnão perdê-lo.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Deve ter várias perguntas. Por que o céu é azul? Por que a minha tela está preta? \nComo amarro uma gravata? '
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Da forma mais indolor então, respectivamente, a luz azul se espalha facilmente por \nter uma maior frequência de onda; a tela está assim por conta do Malvado Mestre \nDelamaro, que sugou sua interface gráfica, deixando apenas este “Terminal”; por fim, não \nsei dar nós em gravatas ou em qualquer outra coisa, pois sou um pinguim virtual. Me chame \nde Linus.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                print('Linus: A propósito, como você chama? (Responda e pressione ENTER.)')
+            print("Capítulo 1 - A Tragédia e o Pinguim")
+            time.sleep(2)
+            print('Linus: Não, de novo não…')
+            time.sleep(2)
+            print('Linus: O Delamaro Mestre Hacker do Mal precisa parar com essas travessuras.')
+            time.sleep(2)
+            txt = 'Linus: Lá vamos nós então, consegue me ouvir err.. ler? (Não consigo te ouvir, responda \nteclando “segue", depois pressionando ENTER. Se não me entendeu, tecle "repete" e ENTER.)'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Perfeito, esse teclado vai ser nossa única forma de comunicação por enquanto, tente \nnão perdê-lo.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Deve ter várias perguntas. Por que o céu é azul? Por que a minha tela está preta? \nComo amarro uma gravata? '
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Da forma mais indolor então, respectivamente, a luz azul se espalha facilmente por \nter uma maior frequência de onda; a tela está assim por conta do Malvado Mestre \nDelamaro, que sugou sua interface gráfica, deixando apenas este “Terminal”; por fim, não \nsei dar nós em gravatas ou em qualquer outra coisa, pois sou um pinguim virtual. Me chame \nde Linus.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            print('Linus: A propósito, como você chama? (Responda e pressione ENTER.)')
+            name = str(input())
+            while '/' in name or ' ' in name or name == '':
+                print('Nome invalido! Favor inserir um novo nome')
                 name = str(input())
-                while '/' in name or ' ' in name or name == '':
-                    print('Nome invalido! Favor inserir um novo nome')
-                    name = str(input())
-                self.user_name = name
-                print('Linus: Interessante. '+self.user_name+', vai também ser útil uma senha simples, digite e nao esqueça dela. (Responda e pressione ENTER.)')
-                self.senha = str(input())
-                txt = '...'
-                self.segue(txt)
-                if self.exit: return
-                print('Linus: Ótimo, alguma pergunta antes de embarcarmos?')
-                time.sleep(2)
-                txt = 'Linus: Brincadeira, não fui programado para responder perguntas, vamos começar antes \nque o Delamaro tenha outra ideia brilhante...'
-                print(txt)
+            self.user_name = name
+            print('Linus: Interessante. '+self.user_name+', vai também ser útil uma senha simples, digite e nao \nesqueça dela. (Responda e pressione ENTER.)')
+            self.senha = str(input())
+            txt = '...'
+            self.segue(txt)
+            if self.exit: return
+            print('Linus: Ótimo, alguma pergunta antes de embarcarmos?')
+            time.sleep(2)
+            txt = 'Linus: Brincadeira, não fui programado para responder perguntas, vamos começar antes \nque o Delamaro tenha outra ideia brilhante...'
+            print(txt)
 
-                self.printed = False
-                self.fase = 2
+            self.fase = 2
         
         #Se estiver na fase 2
         if(self.fase == 2):
-            #Se ainda não tiver imprimido todos os textos
-            if not self.printed:
-                self.printed = True
-                print("\nCapítulo 2 - A Volta ao Mundo")
-                time.sleep(2)
-                txt = 'Linus: Bom, já consegue falar, mas ainda não tomou seus primeiros passos.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Literalmente. Se quiser recuperar a interface gráfica, vai ter que aprender a andar por \naqui.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Diga “ls” ao terminal se quiser enxergar o mundo ao seu redor.'
-                print(txt)
-                self.segue_cond('ls', txt, 'root')
-                if self.exit: return
-                txt = 'Linus: Isso! Veja só que belas paisagens! Não consegue ver? Bom você pode pelo menos \n imaginar, aqui as coisas são simples para que funcionem mais rápido, não tem aquela \n demora toda de abrir uma coisa naquela tela cheia de pastas e ícones, eheheh. Enfim, para \n se movimentar, diga “cd x” ao terminal, onde x representa o lugar para onde deseja \n ir. Experimente entrar na floresta.'
-                print(txt)
-                self.segue_cond('cd floresta', txt, 'root')
-                if self.exit: return
-                txt = 'Linus: Agora que estamos na floresta, olhe ao seu redor com “ls” e vá para o único lugar \navistado usando “cd”.'
-                print(txt)
-                self.segue_cond('cd rio', txt, 'floresta')
-                if self.exit: return
+            print("\nCapítulo 2 - A Volta ao Mundo")
+            time.sleep(2)
+            txt = 'Linus: Bom, já consegue falar, mas ainda não tomou seus primeiros passos.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Literalmente. Se quiser recuperar a interface gráfica, vai ter que aprender a andar por \naqui.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Diga “ls” ao terminal se quiser enxergar o mundo ao seu redor.'
+            print(txt)
+            self.segue_cond('ls', txt, 'root')
+            if self.exit: return
+            txt = 'Linus: Isso! Veja só que belas paisagens! Não consegue ver? Bom você pode pelo menos \n imaginar, aqui as coisas são simples para que funcionem mais rápido, não tem aquela \n demora toda de abrir uma coisa naquela tela cheia de pastas e ícones, eheheh. Enfim, para \n se movimentar, diga “cd x” ao terminal, onde x representa o lugar para onde deseja \n ir. Experimente entrar na floresta.'
+            print(txt)
+            self.segue_cond('cd floresta', txt, 'root')
+            if self.exit: return
+            txt = 'Linus: Agora que estamos na floresta, olhe ao seu redor com “ls” e vá para o único lugar \navistado usando “cd”.'
+            print(txt)
+            self.segue_cond('cd rio', txt, 'floresta')
+            if self.exit: return
 
-                self.printed = False
-                self.fase = 3
-        
+            self.fase = 3
+    
         if(self.fase == 3):
-            #Se ainda não tiver imprimido todos os textos
-            if not self.printed:
-                self.printed = True
-                print("\nCapítulo 3 - A Ponte da Miragem")
-                time.sleep(2)
-                print("Linus: Vamos precisar atravessar este rio. Olhe ao seu redor. Ideias?")
-                txt = 'Linus: Por ser difícil montar em um peixe, a ponte parece ser útil, mas nem a ponte nem a \nágua nem o peixe são lugares. Todos são itens. No mundo do terminal, lugares chamam \n“diretórios” e itens chamam “arquivos”.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Sabemos ir para diretórios usando “cd” mas para inspecionar um arquivo, o comando \né “cat x” (onde x = nome de um arquivo). Tente inspecionar o conteúdo da ponte.'
-                print(txt)
-                self.segue_cond('cat ponte.txt', txt, 'rio')
-                if self.exit: return
-                txt = 'Linus: Instável?! O Delamaro deve ter corrompido nossa única passagem! Não se \ndesespere, o terminal consegue nos ajudar.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Digamos que o terminal tem uma lojinha chamada “apt-get”. Esse mercado é muito \npopular entre os moradores do terminal por vender tudo que a imaginação possa desejar.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Nós queremos apenas um martelo para consertar a ponte.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                txt = 'Linus: Para comprar um da apt-get, digite “apt-get martelo”'
-                print(txt)
-                self.segue_cond('apt-get martelo', txt, 'rio')
-                print("Fabricando cabo...")
-                time.sleep(1)
-                print("Forjando a cabeça...")
-                time.sleep(1)
-                print("Acoplando partes...")
-                time.sleep(1)
-                print("Martelo adquirido !")
-                txt = 'Linus: Martelo em mãos, vamos agora tentar mudar a ponte “instável” para uma ponte \n“firme”.'
-                print(txt)
-                self.segue(txt)
-                if self.exit: return
-                print("Linus: Basta pegar seu martelo e…")
-                time.sleep(1)
-                self.root.filhos['floresta'].filhos['rio'].files['ponte.txt'].setChange(True)
-                self.root.filhos['floresta'].filhos['rio'].rm('ponte.txt')
-                txt = 'Linus: Você está vendo isso ? ... digite ls para ver !'
-                print(txt)
-                self.segue_cond('ls', txt, 'rio')
-                if self.exit: return
-                print("Linus: A ponte estava tão instável que deve ter desabado.")
-                time.sleep(1)
-                print("Linus: Não queria te dar tanto poder tão cedo, mas não vejo outra forma…")
-                time.sleep(1)
-                print("Linus: A realidade é que nem precisávamos ir ao mercado apt-get comprar o martelo para \nconsertar a ponte, pois o terminal faz coisas mágicas para quem pede educadamente.")
-                time.sleep(1)
-                print("Linus: Vamos brincar de Deus por um instante.")
-                txt = 'Linus: Do éter, faça surgir uma ponte, dizendo: “touch ponte.txt”.'
-                print(txt)
-                self.segue_cond('touch ponte.txt', txt, 'rio')
-                if self.exit: return
-                txt = 'Linus: Confirme que ela de fato está lá ... Use “cat” para inspecioná-la.'
-                print(txt)
-                self.segue_cond('cat ponte.txt', txt, 'rio')
-                if self.exit: return
-                print("Linus: Vazia! Nem instável nem firme. Vamos resolver isso de vez.")
-                time.sleep(1)
-                print("Linus: Se “touch” fornece poderes de criação, “echo” fornece o poder da transformação.")
-                txt = 'Linus: Use “echo “firme” > ponte.txt” para caracterizar a ponte que você criou como firme.'
-                print(txt)
-                self.segue_cond('echo "firme" > ponte.txt', txt, 'rio')
-                if self.exit: return
-                txt = 'Linus: Perfeito, sempre bom confirmar que de fato funcionou. Use o cat no arquivo para verificar.'
-                print(txt)
-                self.segue_cond('cat ponte.txt', txt, 'rio')
-                if self.exit: return
-                print("Linus: Olha só! Quem precisa de martelos quando temos o terminal?! Agora vamos tentar não morrer do outro lado dessa ponte. Siga-me.")
-                
-                self.printed = False
-                self.fase = 4
+            print("\nCapítulo 3 - A Ponte da Miragem")
+            time.sleep(2)
+            print("Linus: Vamos precisar atravessar este rio. Olhe ao seu redor. Ideias?")
+            txt = 'Linus: Por ser difícil montar em um peixe, a ponte parece ser útil, mas nem a ponte nem a \nágua nem o peixe são lugares. Todos são itens. No mundo do terminal, lugares chamam \n“diretórios” e itens chamam “arquivos”.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Sabemos ir para diretórios usando “cd” mas para inspecionar um arquivo, o comando \né “cat x” (onde x = nome de um arquivo). Tente inspecionar o conteúdo da ponte.'
+            print(txt)
+            self.segue_cond('cat ponte.txt', txt, 'rio')
+            if self.exit: return
+            txt = 'Linus: Instável?! O Delamaro deve ter corrompido nossa única passagem! Não se \ndesespere, o terminal consegue nos ajudar.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Digamos que o terminal tem uma lojinha chamada “apt-get”. Esse mercado é muito \npopular entre os moradores do terminal por vender tudo que a imaginação possa desejar.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Nós queremos apenas um martelo para consertar a ponte.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Para comprar um da apt-get, digite “apt-get martelo”'
+            print(txt)
+            self.segue_cond('apt-get martelo', txt, 'rio')
+            print("Fabricando cabo...")
+            time.sleep(1)
+            print("Forjando a cabeça...")
+            time.sleep(1)
+            print("Acoplando partes...")
+            time.sleep(1)
+            print("Martelo adquirido !")
+            txt = 'Linus: Martelo em mãos, vamos agora tentar mudar a ponte “instável” para uma ponte \n“firme”.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            print("Linus: Basta pegar seu martelo e…")
+            time.sleep(1.5)
+            self.root.filhos['floresta'].filhos['rio'].files['ponte.txt'].setChange(True)
+            self.root.filhos['floresta'].filhos['rio'].rm('ponte.txt')
+            txt = 'Linus: Você está vendo isso ? ... Use o ls para ver !'
+            print(txt)
+            self.segue_cond('ls', txt, 'rio')
+            if self.exit: return
+            txt = 'Linus: A ponte estava tão instável que deve ter desabado.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Não queria te dar tanto poder tão cedo, mas não vejo outra forma…'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: A realidade é que nem precisávamos ir ao mercado apt-get comprar o martelo para \nconsertar a ponte, pois o terminal faz coisas mágicas para quem pede educadamente.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            print("Linus: Vamos brincar de Deus por um instante.")
+            txt = 'Linus: Do éter, faça surgir uma ponte, dizendo: “touch ponte.txt”.'
+            print(txt)
+            self.segue_cond('touch ponte.txt', txt, 'rio')
+            if self.exit: return
+            txt = 'Linus: Confirme que ela de fato está lá ... Use “cat” para inspecioná-la.'
+            print(txt)
+            self.segue_cond('cat ponte.txt', txt, 'rio')
+            if self.exit: return
+            txt = 'Linus: Vazia! Nem instável nem firme. Vamos resolver isso de vez.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            print("Linus: Se “touch” fornece poderes de criação, “echo” fornece o poder da transformação.")
+            txt = 'Linus: Use “echo “firme” > ponte.txt” para caracterizar a ponte que você criou como firme.'
+            print(txt)
+            self.segue_cond('echo "firme" > ponte.txt', txt, 'rio')
+            if self.exit: return
+            txt = 'Linus: Perfeito, sempre bom confirmar que de fato funcionou. Use o cat no arquivo para verificar.'
+            print(txt)
+            self.segue_cond('cat ponte.txt', txt, 'rio')
+            if self.exit: return
+            print("Linus: Olha só! Quem precisa de martelos quando temos o terminal?! Agora vamos tentar não morrer \ndo outro lado dessa ponte. Siga-me.")
+            
+            self.fase = 4
         
+        if(self.fase == 4):
+            print("\nCapitulo 4 - A Caverna da Criptografia")
+            self.root = self.changeEnv()
+            self.pat = self.root
+            time.sleep(1)
+            txt = 'Linus: Hm… parece que essa caverna sinistra é o único caminho avante.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: '+self.user_name+' acredito no seu bom senso, veja bem, um lugar desses está longe \ndemais do habitat de um pinguim.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Vou ter que te abandonar por aqui, mas que te desejo sucesso na reconquista da sua \ninterface gráfica.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Ah, quase me esqueci! Lá dentro deve encontrar um arquivo razoavelmente prestativo \npelo nome de “ManualQuartus.txt”, recomendo a leitura… até mais!'
+            print(txt)
+            self.segue_cond('touch enigma.txt', 'Leia o manual...', 'caverna')
+            if self.exit: return
+            self.segue_cond('echo "cifra de cesar" > enigma.txt', 'Leia o manual...', 'caverna')
+            if self.exit: return
+            txt = 'Manual: O que?! Saiba que antigamente, ludibriava exércitos inteiros com esse meu enigma!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Manual: Mas para um livro, a palavra é a única coisa que me resta, então tome aqui sua saída. \nSabia que deveria ter mandado o enigma do RSA…'
+            print(txt)
+            saida = Pasta('saida', True)
+            letras = File('letras.txt', False)
+            letras.write('l c d m p g h r j x k e b s n u o y v q a t i w z f')
+            ordenador = File('ordenador', False)
+            ordenador.write('Arquivo executável')
+            saida.add(letras)
+            saida.add(ordenador)
+            self.root.add(saida)
+            print('Manual: Você me parece digno de seguir adiante ... a saida foi criada, use o ls para vê-la')
+            self.segue_cond('cd saida', 'Entre na saida (isso faz algum sentido ?)', 'caverna')
+            if self.exit: return
+            
+            self.fase = 5
+            
+        if(self.fase == 5):
+            print("\nCapitulo 5 - O Deserto da Desordem")
+            time.sleep(1)
+            txt = 'Knuth: Um túnel na caverna de criptografia?? Nao vejo isso faz um bom tempo.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Também foi aprisionado nesse mundo escuro e mágico voluntariamente? Como está \naquele pinguim?'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Desculpa, não interajo com organismos do mundo de fora há séculos, devo me apresentar.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Sou o Donald, passo a eternidade aqui, neste deserto, testando algoritmos de ordenação… \nquer testar um?'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Está vendo aquele monte de letras? Use o cat! Sei que se chegou aqui, deve conhecê-lo.'
+            print(txt)
+            self.segue_cond('cat letras.txt', txt, 'saida')
+            if self.exit: return
+            txt = 'Knuth: Não há tempo em uma vida humana para manualmente ordenar essas letras em ordem \nalfabética! Por isso acabei hoje de preparar um belo algoritmo de ordenação, seria uma honra ter \nvocê aqui para presenciar o funcionamento.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Tente você rodar minha obra! Para executar um programa, use “./x < y”, em que “x” \nrepresenta o nome do programa e “y”, o nome da entrada.'
+            print(txt)
+            self.segue_cond('./ordenador < letras.txt', txt, 'saida')
+            self.root.filhos['saida'].files['letras.txt'].write('a b c d e f g h i j k l m n o p q r s t u v w x y z')
+            if self.exit: return
+            txt = 'Knuth: Olha só a rapidez!! Será que finalmente criei um sort O(n)?? Essa vai para o livro!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: err… perdoe o diálogo retórico, me empolgo às vezes. Obrigado pela companhia, \nmas dizem que está aqui para recuperar sua interface gráfica (não entendo o porque).'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Posso te ajudar a criar um portal diretamente para o lar do famigerado Delamaro.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Knuth: Se “touch” cria arquivos, “mkdir” cria diretórios! Quando quiser partir, só crie um \ndiretório chamado “portal” e entre nele. Fico por aqui mesmo, bom sort, ops, boa sorte na empreitada!'
+            txt = print(txt)
+            self.segue_cond('mkdir portal', txt, 'saida')
+            if self.exit: return
+            self.segue_cond('cd portal', 'Entre no portal', 'saida')
+            if self.exit: return
+            
+            self.fase = 6
+        
+        if(self.fase == 6):
+            print('Capitulo 6 - O Castelo das Trevas ')
+            time.sleep(1)
+            portal = Pasta('portal', False)
+            castelo = Pasta('entradaCastelo', False, False)
+            corda = File('corda.txt')
+            corda.write('Corda grossa de palha.')
+            castelo.add(corda)
+            portal.add(castelo)
+            self.root = portal
+            self.pat = self.root
+            self.segue_cond('cd entradaCastelo', 'Entre no castelo', 'portal')
+            if self.exit: return
+            txt = 'Voz: Usuário detectado.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Voz: Usuário sem permissões para acessar entradaCastelo, lar de sua majestade Dela, o \ninatingível.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Voz: Permissões concedidas apenas para super-usuários. Ativa-se modo super-usuário com “sudo x”, \nonde x = comando qualquer.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Voz: Porque um sistema programado com o fim único de proteger esta fortaleza te fornece essa \ninformação?'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Voz: Porque sei que nao lembra da sua senha. (*gargalhadas metálicas*)'
+            print(txt)
+            self.segue_cond('sudo cd entradaCastelo', 'use o "sudo" antes de entrar no castelo', 'portal')
+            if self.exit: return
+            print("Insira a senha do usuario: ")
+            senha = str(input())
+            while(senha != self.senha):
+                print("Senha incorreta! Tente novamente:")
+                senha = str(input())
+            txt = 'Voz: Aquele Knuth me programou bobão demais! O Mestre Dela não ficará contente com isso…'
+            castelo.changePerm(True)
+            self.pat = castelo
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Ei! '+self.user_name+'! Pra cá!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Sim, pendurado do teto! Servos do Delamaro me capturaram logo depois que te deixei \nna caverna. Mas não me arrependo de ter te ajudado, apesar de não enxergar a grande vantagem de \nviver nessa tal de “interface gráfica”.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Agora chega de conversa, sabe que pinguins tem medo de altura! Remova essa corda que \nme pendura usando o comando “rm x”, onde x é um arquivo ou diretório.'
+            print(txt)
+            self.segue_cond('rm corda.txt', txt, 'entradaCastelo')
+            if self.exit: return
+            txt = 'Linus: Certo, tenho que fugir antes que ele me ache de novo, porém não antes de resolver seu \npepino, estamos tão próximos.'
+            esconde = File('escondeesconde.txt', False)
+            esconde.write('Lectus vivamus erat placerat magna netus integer tincidunt primis, ultricies aliquam urna amet\n \
+                          turpis etiam himenaeos lacus, quis leo eu nisi lorem nullam amet. dolor dictum volutpat molestie\n \
+                          curae proin varius arcu, sed enim vehicula dictumst leo ornare orci, suspendisse varius feugiat\n \
+                          sodales quisque praesent. nisi aptent sed primis fringilla leo malesuada quisque aliquet ad varius\n \
+                          class, habitasse ullamcorper justo platea velit aliquam porttitor venenatis iaculis. blandit ornare\n \
+                          netus sollicitudin ut vulputate euismod, bibendum eu sem maecenas molestie. venenatis varius\n \
+                          vehicula iaculis at velit nisi, at class ornare nunc etiam hendrerit urna, nullam rhoncus nisi velit eu.\n \
+                          \tDictumst felis gravida et velit sodales aliquet sodales dui consequat ultricies ad diam eleifend, at\n \
+                          venenatis massa suspendisse viverra laoreet libero commodo interdum eros est primis. dictumst\n \
+                          nisl quam convallis mi inceptos dolor molestie neque purus quam, fusce mollis et facilisis\n \
+                          consequat netus nam quisque nullam sit, neque praesent ad ullamcorper magna tellus arcu proin\n \
+                          phasellus. potenti phasellus arcu dictum in ultricies torquent aliquam pulvinar, ornare dapibus\n \
+                          faucibus praesent nec ornare enim facilisis, vehicula fames tempus ornare nam venenatis congue.\n \
+                          netus curabitur vulputate rutrum fringilla maecenas sodales arcu hac, euismod sagittis per felis\n \
+                          sapien mattis taciti pulvinar, aenean non mattis est convallis massa nullam. \n \
+                          \tPhasellus molestie consequat facilisis eros habitasse viverra congue metus, habitant eu hac\n \
+                          lobortis sem ligula aenean habitasse ligula, dictum rutrum curabitur pretium tincidunt id quam.\n \
+                          congue cursus fermentum blandit batata senha super secreta: turing1936 malesuada donec\n \
+                          condimentum, dui tempor bibendum blandit vel, massa rhoncus nec class lorem. sollicitudin primis\n \
+                          luctus etiam nisi hac primis nunc quisque, platea lobortis aptent lacinia eu ante curae, ultrices\n \
+                          cubilia felis libero dolor euismod netus. tempor libero consequat sociosqu rhoncus sagittis sed\n \
+                          tristique lobortis vivamus phasellus aptent bibendum, sapien fringilla eu cursus tincidunt lectus\n \
+                          lobortis per consequat nunc elit mauris, donec urna vulputate eleifend at curae sodales suscipit class \n \
+                          fusce nam. \n \
+                          \tNisi velit torquent senectus faucibus nec senectus luctus, vivamus nulla ullamcorper\n \
+                          fermentum porta nec dictum, luctus integer nostra pulvinar torquent etiam. vivamus vestibulum\n \
+                          pretium cubilia magna maecenas vehicula egestas nostra neque pellentesque, suscipit sociosqu\n \
+                          vehicula commodo venenatis faucibus habitant sociosqu orci. auctor metus curabitur class semper\n \
+                          netus tristique sed eget praesent pellentesque, lacus a adipiscing morbi blandit cras tempus quisque\n \
+                          fames, primis elit donec massa pretium sagittis ut sapien arcu. vestibulum erat tempor aenean\n \
+                          fringilla platea cursus, vel bibendum dui potenti tempor, egestas tortor nunc dictum etiam. sed leo\n \
+                          mauris donec odio dui facilisis ut porttitor, hendrerit velit tellus elit proin molestie posuere ac\n \
+                          aliquam, id consectetur dui tempus nisi varius tristique. \n \
+                          \tJusto ad non aptent ultrices facilisis nunc proin ad lobortis, enim potenti fermentum\n \
+                          pellentesque sem varius accumsan justo tempor, imperdiet luctus dolor suspendisse leo id mollis\n \
+                          lorem. pretium ultrices maecenas dictum fermentum vulputate class consequat praesent urna\n \
+                          mauris, cubilia tempus primis orci vel nisl litora iaculis. sit eu ligula praesent class massa\n \
+                          malesuada ultrices diam sit lacus, hendrerit congue sagittis congue quisque scelerisque id habitant\n \
+                          dui accumsan, ac erat habitant lectus condimentum ultricies suspendisse etiam sociosqu. tellus\n \
+                          malesuada rhoncus per semper diam, erat primis quisque aliquam. \n')
+            self.root.filhos['entradaCastelo'].add(esconde)
+            txt = 'Linus: Enquanto estava amarrado, vi o Dela retirando uma senha desse arquivo \nescondeesconde.txt e usando ela para sair do terminal.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Não guardei a senha direito, mas lembro que estava escrita na mesma linha em que \ntambém estava escrito “batata”.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: O terminal sempre teve um comando para nos salvar e dessa vez não vai ser diferente. O \ncomando “grep” mostra a linha toda de um arquivo, que contém um certo trecho já conhecido!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Use ele assim: “grep “x” y”, onde x seria seu trecho conhecido e y, um arquivo. Agilidade!'
+            print(txt)
+            self.segue_cond('grep "batata" escondeesconde.txt', txt, 'entradaCastelo')
+            if self.exit: return
+            print('congue cursus fermentum blandit batata senha super secreta: turing1936 malesuada donec')
+            interface = File('interfaceGrafica.txt', False)
+            self.pat.add(interface)
+            txt = 'Linus: Ótimo, em breve deve abrir um portal para a interface gráfica, você escreve essa senha lá \ndentro e voilá!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Delamaro: Para onde pensa que vai Linus?? Este estrupício te liberou?'
+            dela = File('Delamaro.txt', False)
+            dela.write('Entranhas malignas.')
+            self.root.filhos['entradaCastelo'].add(dela)
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Delamaro: '+self.user_name+' deveria me agradecer por estar entre a metade dos usuários de \ncomputadores que eu suguei para este mundo! Usuários de interface gráfica estão muito mal \nacostumados, nunca experimentaram o poder de verdade, e parecem nem querer!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            print('Delamaro: Ademais,')
+            time.sleep(1.5)
+            txt = 'Linus: Psst, sinto que esse discurso vai longe, tá aqui sua chance - nunca achei que diria isso \nmas - o que será que aconteceria se tentasse remover o Delamaro?'
+            print(txt)
+            self.segue_cond('rm Delamaro.txt', txt, 'entradaCastelo')
+            self.root.filhos['entradaCastelo'].files['Delamaro.txt'].setChange(True)
+            print('Delamaro: … e tenho sim um sonho em que o mundo reconhece … hm ...')
+            time.sleep(1.5)
+            print('Delamaro: … dizem que um braço esquerdo dormente não é bom sinal …')
+            time.sleep(1.5)
+            txt = 'Linus: Tá funcionando! Tenta de novo, com super-usuário ativado!'
+            print(txt)
+            self.segue_cond('sudo rm Delamaro.txt', txt, 'entradaCastelo')
+            print("Insira a senha do usuario: ")
+            senha = str(input())
+            while(senha != self.senha):
+                print("Senha incorreta! Tente novamente:")
+                senha = str(input())
+            self.root.filhos['entradaCastelo'].rm('Delamaro.txt')
+            if self.exit: return
+            txt = 'Linus: Funcionou! Como não pensei nisso antes?!'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Bom, chamo isso de um dia produtivo.'
+            print(txt)
+            self.segue(txt)
+            if self.exit: return
+            txt = 'Linus: Acho que vou visitar o Donald e ver como está indo o quarto volume daquele livro. Olha só, \no portal que eu tinha mencionado abriu! Só depositar a senha nele - a menos que quiser ficar por \naqui comigo. Garanto a diversão! Nesse caso, digite “palavras superam imagens”.'
+            print(txt)
+            return
 #---------------------------------------------------------------------------------------------------
         
 env = Envirorment('user')
 env.checkFase()
+print('Digite a sua resposta:')
+resp = str(input())
+while(resp != 'palavras superam imagens'):
+    if(resp == 'echo “turing1936” > interfaceGrafica.txt'):
+        print('\tEscolha incorreta, tente novamente.\n\n\n')
+        env = Envirorment('user')
+        env.checkFase()
+        print('Digite a sua resposta:')
+        resp = str(input())
+    else:
+        print('Não tente mudar de assunto! Faça a sua escolha!')
+        print('Digite a sua resposta:')
+        resp = str(input())
+print('\tUm dia feliz em pinguimlândia.\n\n\n')
