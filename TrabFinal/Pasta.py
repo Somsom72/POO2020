@@ -828,9 +828,12 @@ if not ext:
         if(resp == 'echo "turing1936" > interfaceGrafica.txt'):
             print('\tEscolha incorreta, tente novamente.\n\n\n')
             env = Envirorment('user')
-            env.checkFase()
-            print('Digite a sua resposta:')
-            resp = str(input())
+            ext = env.checkFase()
+            if not ext:
+                print('Digite a sua resposta:')
+                resp = str(input())
+            else:
+                break
         else:
             print('Não tente mudar de assunto! Faça a sua escolha!')
             print('Digite a sua resposta:')
