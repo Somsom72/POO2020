@@ -517,9 +517,9 @@ class Envirorment(object):
             ordenador.write('Arquivo executável')
             saida.add(letras)
             saida.add(ordenador)
-            self.root.add(saida)
-            print('Manual: Você me parece digno de seguir adiante ... a saida foi criada, use o ls para vê-la')
-            self.segue_cond('cd saida', 'Entre na saida (isso faz algum sentido ?)', 'caverna')
+            self.root.filhos['caverna'].add(saida)
+            print('Manual: Você me parece digno de seguir adiante ... a saída foi criada, use o ls para vê-la.')
+            self.segue_cond('cd saida', 'Entre na saída (isso faz algum sentido ?)', 'caverna')
             if self.exit: return
             
             self.fase = 5
@@ -554,7 +554,7 @@ class Envirorment(object):
             txt = 'Knuth: Tente você rodar minha obra! Para executar um programa, use “./x < y”, em que “x” \nrepresenta o nome do programa e “y”, o nome da entrada.'
             print(txt)
             self.segue_cond('./ordenador < letras.txt', txt, 'saida')
-            self.root.filhos['saida'].files['letras.txt'].write('a b c d e f g h i j k l m n o p q r s t u v w x y z')
+            self.root.filhos['caverna'].filhos['saida'].files['letras.txt'].write('a b c d e f g h i j k l m n o p q r s t u v w x y z')
             if self.exit: return
             time.sleep(1)
             print('--- execução completa ---')
@@ -580,7 +580,7 @@ class Envirorment(object):
             self.fase = 6
         
         if(self.fase == 6):
-            print('Capitulo 6 - O Castelo das Trevas ')
+            print('\nCapitulo 6 - O Castelo das Trevas ')
             time.sleep(1)
             portal = Pasta('portal', False)
             castelo = Pasta('entradaCastelo', False, False)
@@ -750,7 +750,7 @@ env.checkFase()
 print('Digite a sua resposta:')
 resp = str(input())
 while(resp != 'palavras superam imagens'):
-    if(resp == 'echo “turing1936” > interfaceGrafica.txt'):
+    if(resp == 'echo "turing1936" > interfaceGrafica.txt'):
         print('\tEscolha incorreta, tente novamente.\n\n\n')
         env = Envirorment('user')
         env.checkFase()
@@ -760,4 +760,4 @@ while(resp != 'palavras superam imagens'):
         print('Não tente mudar de assunto! Faça a sua escolha!')
         print('Digite a sua resposta:')
         resp = str(input())
-print('\tUm dia feliz em pinguimlândia.\n\n\n')
+print('\n\n\n\tUm dia feliz em pinguimlândia.\n\n\n')
