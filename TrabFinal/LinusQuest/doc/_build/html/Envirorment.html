@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <title>Envirorment &#8212; LinusQuest  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="File" href="File.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="envirorment">
+<h1>Envirorment<a class="headerlink" href="#envirorment" title="Permalink to this headline">¶</a></h1>
+<p>Classe que cria objetos do tipo envirorment, que simulam o terminal de uma máquina e realizam a progressão do jogo</p>
+<div class="section" id="metodos">
+<h2>Métodos:<a class="headerlink" href="#metodos" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="init-self-user-name">
+<h3>1. __init__(self, user_name)<a class="headerlink" href="#init-self-user-name" title="Permalink to this headline">¶</a></h3>
+<p>Construtor do objeto</p>
+<div class="section" id="inputs">
+<h4>Inputs:<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+<li><p>user_name(str): Nome do usuario</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="changeenv-self">
+<h3>2. changeEnv(self)<a class="headerlink" href="#changeenv-self" title="Permalink to this headline">¶</a></h3>
+<p>Método que cria uma nova estrututra para o ambiente</p>
+<div class="section" id="id1">
+<h4>Inputs:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+</ul>
+</div>
+<div class="section" id="outputs">
+<h4>Outputs:<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>(Pasta): Pasta raiz do novo sistema</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="cmdreader-self-cmd-rep">
+<h3>3. cmdReader(self, cmd, rep)<a class="headerlink" href="#cmdreader-self-cmd-rep" title="Permalink to this headline">¶</a></h3>
+<p>Função que le e interpreta um comando passado ao terminal</p>
+<div class="section" id="input">
+<h4>Input:<a class="headerlink" href="#input" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+<li><p>cmd: (str) Linha do comando dado ao terminal</p></li>
+<li><p>rep(str): Frase que será repetida caso seja dado o comando repete</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="printline-self">
+<h3>4. printLine(self)<a class="headerlink" href="#printline-self" title="Permalink to this headline">¶</a></h3>
+<p>Método que imprime a linha do terminal</p>
+<div class="section" id="id2">
+<h4>Inputs:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="segue-self-rep">
+<h3>5. segue(self, rep)<a class="headerlink" href="#segue-self-rep" title="Permalink to this headline">¶</a></h3>
+<p>Método que processa os comandos inseridos pelo usuario e segue o fluxo do jogo caso o comando segue seja dado</p>
+<div class="section" id="id3">
+<h4>Inputs:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+<li><p>rep(str): Mensagem passada para o cmdReader para ser repetido</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="seguecond-self-cmd-obj-txt-pat-nome">
+<h3>6. segueCond(self, cmd_obj, txt, pat_nome)<a class="headerlink" href="#seguecond-self-cmd-obj-txt-pat-nome" title="Permalink to this headline">¶</a></h3>
+<p>Método que segue o fluxo do jogo caso um comando específicado seja dado em uma pasta especificada</p>
+<div class="section" id="id4">
+<h4>Inputs:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+<li><p>cmd_obj(str): string com o comando que deve ser dado para a continuação do jogo</p></li>
+<li><p>txt(str): texto que será passado para o cmdReader para ser repetido</p></li>
+<li><p>pat_nome(str): Nome da pasta na qual o comando deve ser dado</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="checkfase-self">
+<h3>7. checkFase(self)<a class="headerlink" href="#checkfase-self" title="Permalink to this headline">¶</a></h3>
+<p>Método que realiza a progressão do jogo</p>
+<div class="section" id="id5">
+<h4>Input:<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(Envirorment): Ponteiro para o objeto</p></li>
+</ul>
+</div>
+<div class="section" id="output">
+<h4>Output:<a class="headerlink" href="#output" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>(bool): Valor booleano que indica se o comando exit foi dado ou não</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="atributos">
+<h2>Atributos:<a class="headerlink" href="#atributos" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>user_name(str): Nome do usuario do ambiente</p></li>
+<li><p>root(Pasta): Pasta raiz do ambiente</p></li>
+<li><p>pat(Pasta): Pasta atual do ambiente</p></li>
+<li><p>fase(int): Fase atual do jogo</p></li>
+<li><p>exit(bool): Flag que indica se o comando exit foi dado</p></li>
+<li><p>senha(str): Senha do usuario</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">LinusQuest</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Classes:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Pasta.html">Pasta</a></li>
+<li class="toctree-l1"><a class="reference internal" href="File.html">File</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Envirorment</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#metodos">Métodos:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atributos">Atributos:</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="File.html" title="previous chapter">File</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Gustavo Bartholomeu, Luca Maciel, Nathan Oliveira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/Envirorment.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

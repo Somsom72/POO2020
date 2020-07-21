@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="pt-br">
+  <head>
+    <meta charset="utf-8" />
+    <title>File &#8212; LinusQuest  documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Envirorment" href="Envirorment.html" />
+    <link rel="prev" title="Pasta" href="Pasta.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="file">
+<h1>File<a class="headerlink" href="#file" title="Permalink to this headline">¶</a></h1>
+<p>Classe que cria objetos do tipo File que serão manipulados durante a execução do jogo</p>
+<div class="section" id="metodos">
+<h2>Métodos:<a class="headerlink" href="#metodos" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="new-cls-nome-change-true">
+<h3>1. __new__(cls, nome, change=True)<a class="headerlink" href="#new-cls-nome-change-true" title="Permalink to this headline">¶</a></h3>
+<p>Método que instancia a classe ou impede a sua istanciação caso
+algumas condições não sejam satisfeitas</p>
+<div class="section" id="inputs">
+<h4>Inputs:<a class="headerlink" href="#inputs" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>cls(File): O ponteiro para a classe</p></li>
+<li><p>nome(str): Nome do novo objeto</p></li>
+<li><p>change(bool): Flag que indica se o objeto pode ou não ser modificado pelo usuário</p></li>
+</ul>
+</div>
+<div class="section" id="outputs">
+<h4>Outputs:<a class="headerlink" href="#outputs" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>(File): Objeto instanciado</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="init-self-nome-change-true">
+<h3>2. __init__(self, nome, change=True)<a class="headerlink" href="#init-self-nome-change-true" title="Permalink to this headline">¶</a></h3>
+<p>Método construtor da classe</p>
+<div class="section" id="id1">
+<h4>Inputs:<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(File): O ponteiro para o objeto</p></li>
+<li><p>nome(str): Nome do novo objeto</p></li>
+<li><p>change(bool): Flag que indica se o objeto pode ou não ser modificado pelo usuário</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="write-self-text">
+<h3>3. write(self, text)<a class="headerlink" href="#write-self-text" title="Permalink to this headline">¶</a></h3>
+<p>Método que salva uma string como conteudo do objeto.</p>
+<div class="section" id="id2">
+<h4>Inputs:<a class="headerlink" href="#id2" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(File): O ponteiro para o objeto</p></li>
+<li><p>text(str): String com o conteúdo a ser salvo no objeto</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="show-self">
+<h3>4. show(self)<a class="headerlink" href="#show-self" title="Permalink to this headline">¶</a></h3>
+<p>Método que retorna o conteúdo de um objeto caso ele possua um ou uma mensagem caso contrário</p>
+<div class="section" id="id3">
+<h4>Inputs:<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(File): O ponteiro para o objeto</p></li>
+</ul>
+</div>
+<div class="section" id="id4">
+<h4>Outputs:<a class="headerlink" href="#id4" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>(str): Conteudo do objeto caso haja e None caso contrário</p></li>
+</ul>
+</div>
+</div>
+<div class="section" id="setchange-self-change">
+<h3>5. setChange(self, change)<a class="headerlink" href="#setchange-self-change" title="Permalink to this headline">¶</a></h3>
+<p>Método que altera a flag de modificação do objeto</p>
+<div class="section" id="id5">
+<h4>Inputs:<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<ul class="simple">
+<li><p>self(File): O ponteiro para o objeto</p></li>
+<li><p>change(bool): Novo valor da flag</p></li>
+</ul>
+</div>
+</div>
+</div>
+<div class="section" id="atributos">
+<h2>Atributos:<a class="headerlink" href="#atributos" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>nome(str): Nome do objeto</p></li>
+<li><p>pai(Pasta): Pasta na qual se encontra o objeto</p></li>
+<li><p>conteudo(str): Conteudo do objeto</p></li>
+<li><p>change(bool): Flag que indica se o ususario pode ou não modificar o objeto</p></li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">LinusQuest</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption"><span class="caption-text">Classes:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Pasta.html">Pasta</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">File</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#metodos">Métodos:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#atributos">Atributos:</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Envirorment.html">Envirorment</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="Pasta.html" title="previous chapter">Pasta</a></li>
+      <li>Next: <a href="Envirorment.html" title="next chapter">Envirorment</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2020, Gustavo Bartholomeu, Luca Maciel, Nathan Oliveira.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/File.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
