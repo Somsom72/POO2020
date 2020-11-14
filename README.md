@@ -1,2 +1,2 @@
 # POO2020
-Object Oriented Programming, 3semester2020
+Object Oriented Programming, 1semester2020
